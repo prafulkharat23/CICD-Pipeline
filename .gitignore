@@ -205,3 +205,48 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# CI/CD specific
+.jenkins/
+.github/secrets/
+bandit-report.json
+trivy-results.sarif
+
+# Docker
+.dockerignore
+
+# Deployment artifacts
+*.tar.gz
+deploy/
+staging/
+production/
+
+# Application specific
+*.sqlite
+*.db
+logs/
+temp/
+tmp/
+
+# Security
+*.pem
+*.key
+secrets.txt
+.secrets
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+
+# Local configuration
+config.local.py
+settings.local.py
