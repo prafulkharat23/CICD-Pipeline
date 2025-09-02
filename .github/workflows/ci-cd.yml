@@ -1,12 +1,14 @@
-name: Flask CI/CD Pipeline
+name: Flask CI/CD Pipeline (DISABLED - Use ci-cd-v2.yml)
 
 on:
-  push:
-    branches: [ main, staging, develop ]
-  pull_request:
-    branches: [ main, staging ]
-  release:
-    types: [ published ]
+  # Temporarily disabled to test new workflow
+  # push:
+  #   branches: [ main, staging, develop ]
+  # pull_request:
+  #   branches: [ main, staging ]
+  # release:
+  #   types: [ published ]
+  workflow_dispatch:  # Manual trigger only
 
 # Add permissions for security scanning
 permissions:
