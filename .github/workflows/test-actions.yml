@@ -1,0 +1,79 @@
+name: Test Actions Versions
+
+on:
+  workflow_dispatch:  # Manual trigger
+  push:
+    paths:
+      - 'WORKFLOW_TRIGGER.md'
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  test-actions:
+    name: Test Action Versions
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+    
+    - name: Test artifact upload
+      run: |
+        echo "Testing artifact actions..." > test-file.txt
+        echo "All actions should be v4 or latest" >> test-file.txt
+    
+    - name: Upload test artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-artifact
+        path: test-file.txt
+        retention-days: 1
+    
+    - name: Download test artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: test-artifact
+    
+    - name: Verify artifact
+      run: |
+        cat test-file.txt
+        echo "✅ Artifact actions working correctly!"
+    
+    - name: Create dummy SARIF for CodeQL test
+      run: |
+        cat > test-results.sarif << 'EOF'
+        {
+          "version": "2.1.0",
+          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+          "runs": [
+            {
+              "tool": {
+                "driver": {
+                  "name": "Test Tool",
+                  "version": "1.0.0"
+                }
+              },
+              "results": []
+            }
+          ]
+        }
+        EOF
+    
+    - name: Test CodeQL action v3
+      uses: github/codeql-action/upload-sarif@v3
+      if: github.event_name == 'push'
+      with:
+        sarif_file: 'test-results.sarif'
+    
+    - name: Success message
+      run: |
+        echo "🎉 All GitHub Actions are working with latest versions!"
+        echo "✅ No deprecation warnings should appear"
